@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.dayatang.banking.IoCUtils;
 import com.dayatang.banking.application.BankApplication;
 import com.dayatang.banking.domain.Account;
+import com.dayatang.banking.domain.DepositZeroOrNegativeException;
 import com.dayatang.domain.InstanceFactory;
 
 public class BankApplicationImplIntegrationTest {
@@ -55,7 +56,7 @@ public class BankApplicationImplIntegrationTest {
 	}
 
 	@Test
-	public void testCreateAccountString() {
+	public void testCreateAccountWithName() {
 		Account account = instance.createAccount("newAccount");
 		account = instance.getAccount(account.getId());
 		assertNotNull(account);
@@ -65,7 +66,7 @@ public class BankApplicationImplIntegrationTest {
 	}
 
 	@Test
-	public void testCreateAccountStringDouble() {
+	public void testCreateAccountWithNameAndBalance() {
 		Account account = instance.createAccount("newAccount", 250.5);
 		account = instance.getAccount(account.getId());
 		assertNotNull(account);
@@ -85,6 +86,7 @@ public class BankApplicationImplIntegrationTest {
 	@Test
 	public void testDeposit() {
 		instance.deposit(from, 20);
+		from = instance.getAccount(from.getId());
 		assertEquals(1020.0, from.getBalance(), 0.0001);
 	}
 
