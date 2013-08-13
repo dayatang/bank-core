@@ -12,7 +12,6 @@ import org.junit.Test;
 import com.dayatang.banking.IoCUtils;
 import com.dayatang.banking.application.BankApplication;
 import com.dayatang.banking.domain.Account;
-import com.dayatang.banking.domain.DepositZeroOrNegativeException;
 import com.dayatang.domain.InstanceFactory;
 
 public class BankApplicationImplIntegrationTest {
