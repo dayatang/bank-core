@@ -50,13 +50,16 @@ public class Account extends AbstractEntity {
 
 	public void deposit(double amount) {
 		if (amount <= 0) {
-			throw new DepositException("");
+			throw new DepositZeroOrNegativeException();
 		}
 		balance += amount;
 		save();
 	}
 
 	public void withdraw(double amount) {
+		if (amount <= 0) {
+			throw new WithdrawZeroOrNegativeException();
+		}
 		if (amount > balance) {
 			throw new BalanceInsufficientException();
 		}
@@ -65,6 +68,12 @@ public class Account extends AbstractEntity {
 	}
 
 	public void transferFundTo(Account toAccount, double amount) {
+		if (amount <= 0) {
+			throw new TransferZeroOrNegativeException();
+		}
+		if (amount > balance) {
+			throw new BalanceInsufficientException();
+		}
 		this.setBalance(balance - amount);
 		this.save();
 		toAccount.setBalance(toAccount.getBalance() + amount);

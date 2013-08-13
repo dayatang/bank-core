@@ -34,13 +34,23 @@ public class WithdrawTest {
 
 	@Test
 	public void testSuccess() {
-		instance.withdraw(20);
+		instance.withdraw(20.0);
 		assertEquals("余额应当为80!", 80, instance.getBalance(), 0.0001);
 		verify(repository).save(instance);
 	}
 
 	@Test(expected = BalanceInsufficientException.class)
 	public void balanceInsufficient() {
-		instance.withdraw(200);
+		instance.withdraw(200.0);
+	}
+
+	@Test(expected = WithdrawZeroOrNegativeException.class)
+	public void withdrawZero() {
+		instance.withdraw(0.0);
+	}
+
+	@Test(expected = WithdrawZeroOrNegativeException.class)
+	public void withdrawNegative() {
+		instance.withdraw(-50.0);
 	}
 }

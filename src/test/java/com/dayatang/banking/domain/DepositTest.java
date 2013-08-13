@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.dayatang.banking.domain.Account;
-import com.dayatang.banking.domain.DepositException;
+import com.dayatang.banking.domain.DepositZeroOrNegativeException;
 import com.dayatang.domain.EntityRepository;
 
 public class DepositTest {
@@ -34,17 +34,17 @@ public class DepositTest {
 
 	@Test
 	public void testSuccess() {
-		instance.deposit(50L);
+		instance.deposit(50.0);
 		assertEquals("余额应当为150!", 150, instance.getBalance(), 0.0001);
 		verify(repository).save(instance);
 	}
 
-	@Test(expected = DepositException.class)
+	@Test(expected = DepositZeroOrNegativeException.class)
 	public void depositNegative() {
 		instance.deposit(-5);
 	}
 
-	@Test(expected = DepositException.class)
+	@Test(expected = DepositZeroOrNegativeException.class)
 	public void depositZero() {
 		instance.deposit(0);
 	}

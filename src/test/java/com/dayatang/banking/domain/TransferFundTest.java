@@ -25,9 +25,7 @@ public class TransferFundTest {
 		MockitoAnnotations.initMocks(this);
 		Account.setRepository(repository);
 		from = new Account("account3", 100);
-		from.save();
 		to = new Account("account4", 10);
-		to.save();
 	}
 
 	@After
@@ -37,11 +35,25 @@ public class TransferFundTest {
 
 	@Test
 	public void testSuccess() {
-		from.transferFundTo(to, 50L);
+		from.transferFundTo(to, 50.0);
 		assertEquals("转出账户余额应当为50!", 50, from.getBalance(), 0.0001);
-		verify(repository, atLeastOnce()).save(from);
+		verify(repository).save(from);
 		assertEquals("转入账户余额应当为60!", 60, to.getBalance(), 0.0001);
-		verify(repository, atLeastOnce()).save(to);
+		verify(repository).save(to);
 	}
 
+	@Test(expected = BalanceInsufficientException.class)
+	public void insufficientBalance() {
+		from.transferFundTo(to, 10000.0);
+	}
+	
+	@Test(expected = TransferZeroOrNegativeException.class)
+	public void transferZero() {
+		from.transferFundTo(to, 0.0);
+	}
+	
+	@Test(expected = TransferZeroOrNegativeException.class)
+	public void transferNegative() {
+		from.transferFundTo(to, -50.0);
+	}
 }
